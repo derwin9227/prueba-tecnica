@@ -30,6 +30,7 @@ const starships = async (pasajeros, page) => {
                 console.log("+++++++++++++++++");
                 console.log(filteredShips);
                 console.log("+++++++++++++++++");
+                renderPlanetPassengers(filteredShips);
                 return bestShip(filteredShips.filter(e => !isNaN(e.speed) && e.consumables!=="unknown"));
             }else
                 console.log("no hay naves disponibles");
@@ -92,7 +93,18 @@ const speedToInt= ship => {
     return nave.sort((a,b)=> a.speed - b.speed).reverse();
 };
 
-starships(0,1);
+const renderPlanetPassengers = planet => {
+    container.innerHTML = `
+    <div class="render">
+        <h2>Planeta: ${planet[0].name}</h2>
+        <p>Pasajeros: ${planet[0].passengers}</p>
+        <p>Films: ${planet[0].films}</p>
+        <p>Capacidad de viaje: ${planet[0].consumables}</p>
+        <p>Velocidad: ${planet[0].speed}</p>
+    </div>`;   
+}
+
+//starships(0,1);
 
 
 /* 5. Planet by terrain
@@ -116,8 +128,7 @@ const planet1 = async (terreno) => {
     for(let i=0;i<resApi.results.length;i++){
         if(resApi.results[i].terrain.search(terreno) !== -1)
                 planets.push(resApi.results[i]);
-        else
-            {console.log('no encontrado');}
+        
     }
     const sortPlanets = planets.sort((a,b) => a.population-b.population);
     console.log(`el planeta es ${sortPlanets[sortPlanets.length-1].name}`);
@@ -127,7 +138,7 @@ const planet1 = async (terreno) => {
 
 const renderPlanet = planet => {
         container.innerHTML = `
-        <div style="border: 1px solid black">
+        <div class="render">
             <h2>planeta: ${planet[0].name}</h2>
             <p>terreno: ${planet[0].terrain}</p>
             <p>poblacion: ${planet[0].population}</p>

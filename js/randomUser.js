@@ -11,16 +11,34 @@ const users = async () => {
 
         const users = await llamadaAPI.json();
         
-        users.results.forEach(user => {
-            usersList.push(user.name.first);
-        });
-        console.log(usersList.sort());
+        //console.log(users.results);
+        renderUser(users.results);
     }
     catch(e){
         return console.error(e);
     }
         
 };
+const renderUser = user => {
+    const sortUsers = user.sort((a,b) => {
+        if(a.name.first > b.name.first)
+            return 1;
+        if(a.name.first < b.name.first)
+            return -1
+        return 0;
+    });
+
+    sortUsers.forEach(user => {
+    container.innerHTML += `
+    <div class="render">
+        <h2>Nombre: ${user.name.first} ${user.name.last}</h2>
+        <p>Correo: ${user.email}</p>
+        <p>Genero: ${user.male ==="male" ? "Masculino" : "Femenino" }</p>
+        <p>Edad: ${user.dob.age}</p>
+    </div>`;
+});
+   
+}
 //users();
 
 
@@ -38,9 +56,10 @@ const usersAge = async (edad) => {
     const users = await llamadaAPI.json();
 
     const usersList = users.results;
-    console.log(users);
     for (const user of usersList) {
         if(user.dob.age > edad){
+            renderUser2(user);
+            console.log(user);
             return console.log(user);
             break;
         }
@@ -48,7 +67,18 @@ const usersAge = async (edad) => {
             {console.log("no hay usuarios con a "+ edad + " en esta busqueda");}
     }
 };
-//usersAge(60);
+
+const renderUser2 = user => {
+    container.innerHTML = `
+    <div class="render">
+        <h2>Nombre: ${user.name.first} ${user.name.last}</h2>
+        <p>Correo: ${user.email}</p>
+        <p>Genero: ${user.male ==="male" ? "Masculino" : "Femenino" }</p>
+        <p>Edad: ${user.dob.age}</p>
+    </div>`;   
+}
+
+//usersAge(50);
 
 
 /*
@@ -72,7 +102,7 @@ const charsUsers = async () => {
         usersList.forEach(element => {
             persona.push({nombre: element, letra: charCount(element)});
         });
-        
+        renderUser3(persona);
         console.log(persona);
     }
     catch(e){
@@ -94,4 +124,15 @@ const charCount = text => {
     return palabra.sort((a, b) => a.repeticiones - b.repeticiones).reverse()[0];
 };
 
-//charsUsers();
+const renderUser3 = user => {
+    user.forEach(user => {
+    container.innerHTML += `
+    <div class="render">
+        <h2>Nombre: ${user.nombre}</h2>
+        <p>Letra mas repetida: ${user.letra.letra}</p>
+        <p>Repeticiones: ${user.letra.repeticiones}</p>
+    </div>`;
+});
+   
+}
+charsUsers();
